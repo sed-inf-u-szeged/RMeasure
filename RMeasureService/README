@@ -1,0 +1,93 @@
+----------------------------------------
+Compile
+-----------------------------------------
+#if all methods supported:
+make TIMER=1 RAPL=1 SCOPE=1
+
+#only timer method
+make TIMER=1
+
+#------------------------------------------------
+#Configuration file settings - rMeasureService.cfg
+#------------------------------------------------
+
+name = "RMeasure Settings"
+
+# Server parameters. Set them a value is optional, because this params have default values.
+server =
+{
+    # The Port option tells the server on which TCP port to listen.
+    # default is 8081
+    portNumber = 8080;
+
+    # The path of the log file
+    # default is default.log
+    logFile = "./service_log";
+
+    # Named pipe (FIFO) exist as a device special file in the file system
+    # The kernels (the executed applications) will communicate the Service via this (REPARA macros)
+    fifoName = "./REPARA_FIFO";
+
+    # This function sets the amount of time the server will keep a TCP connection with a client open after completing an HTTP transaction, waiting for the next request from the client. The value is the period, in seconds.
+    keepaliveTimeout = 0;
+
+    # This function sets the maximum number of requests Abyss will accept on a single TCP connection.
+    keepaliveMaxConn = 0;
+
+    # This function sets how long the server will wait for a client to send its request once the
+    # client has connected to the server. If the client does not send a complete request
+    # within this time, the server aborts HTTP transaction and terminates the TCP connection.
+    timeout = 15;
+
+    # The server has a feature wherein it can tell querents things about itself,
+    # such as what methods is knows. The feature is called "introspection.
+    # By default, the feature is available, but if you set dont_advertise to nonzero, it isn't.
+    dontAdvertise = false;
+};
+
+
+# RAPL information provide data for the RaplCounter measurement.
+# Each socket has a name from their HPP-DL descriptions and has one or more core.
+# Service needs one of these core numbers per sockets to calculate the processors energy consumption.
+rapl =
+{
+  sockets = ( {   hppdl = "platform:0.processor:0";
+                  firstCore = 0;
+              },
+              {   hppdl = "platform:0.processor:1";
+                  firstCore = 12;
+              }
+            );
+};
+
+
+#The address of the Parallel Port for the scope measurements
+scope =
+{
+  //default is 0xf100
+  parallelPortAddress = 0xf100;
+}
+
+
+// Timer Information returns the HPP-DL description of the system
+timer =
+{
+  systemId = "platform:0";
+};
+
+#------------------------------------------------
+# Using the rMeasureService
+#------------------------------------------------
+Usage:
+$ sudo /etc/init.d/rMeasureService start
+where rMeasureService is the rMeasureService.sh, which copied into the /etc/init.d/ directory
+$ sudo /etc/init.d/rMeasureService stop
+
+
+Root priviligies are required to access the MSR registers and to control the parallel port bits.
+
+In case of RAPL Measurement to read the model-specific registers (MSRs).
+    NOTES:
+        The msr driver is not auto-loaded. You need to use
+        the following command to load it explicitly before using the rMeasureService:
+            $ sudo modprobe msr

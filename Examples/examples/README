@@ -1,0 +1,6 @@
+
+In the rmeasure.h file, we need to set the following pipe path
+
+    #define FIFO_FILE "../../RMeasureService/RMEASURE_FIFO"
+
+For Dynamic Analyzes need to define DYNAMIC_ANALYSIS

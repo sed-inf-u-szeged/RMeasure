@@ -1,0 +1,18 @@
+To use librmeasure, we need to install the following libs:
+    libxmlrpc_client++ libxmlrpc_client libxmlrpc++
+
+And need to set the following enviroment variables:
+
+    SCOPESERVICE // value is the path where is the ScopeControlService
+        export SCOPESERVICE="http://localhost:8080/RPC2"
+    RMEASURESERVICE // value is the path where is the RMeasureService
+        export RMEASURESERVICE="http://localhost:8081/RPC2"
+
+-------------------------
+compile
+-------------------------
+#if all measurement supported:
+make SCOPE=1 RAPL=1 TIMER=1
+
+#if only timer supported:
+make TIMER=1

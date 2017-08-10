@@ -1,0 +1,14 @@
+# It's an example usage for librmeasure and Services.
+# The Makefile includes the neccessary libs for the rmeasurelib
+
+# Compile if all measurement method supported
+make SCOPE=1 RAPL=1 TIMER=1
+
+# for timer measurement only
+make TIMER=1
+
+# Config file contains information for the running applications.
+# The FrameWork sets the following enviroment variables from the config file (scopeService, rmeasureService):
+    SCOPESERVICE // value is the path where is the ScopeControlService
+    RMEASURESERVICE // value is the path where is the RMeasureService
+# These enviroment variables are used by the librmeasure

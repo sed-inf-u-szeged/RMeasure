@@ -1,0 +1,72 @@
+----------------------------------------
+Compile
+-----------------------------------------
+
+
+For the PicoScope4000A we used the libps4000a-1.0 library
+Also libconfig++ and the libxmlrpc-c++8-dev and xmlrpc-api-utils (we use the 1.33.06-0ubuntu1 versions) are required to install
+
+make
+
+#------------------------------------------------
+#Configuration file settings - rMeasureService.cfg
+#------------------------------------------------
+
+name = "Scope Control Service Settings"
+
+# Server parameters. Set them a value is optional, because this params have default values.
+server =
+{
+    # The Port option tells the server on which TCP port to listen.
+    # default is 8080
+    portNumber = 8080;
+
+    # The path of the log file
+    # default is default.log
+    logFile = "./service_log";
+
+    # This function sets the amount of time the server will keep a TCP connection with a client open after completing an HTTP transaction, waiting for the next request from the client. The value is the period, in seconds.
+    keepaliveTimeout = 0;
+
+    # This function sets the maximum number of requests Abyss will accept on a single TCP connection.
+    keepaliveMaxConn = 0;
+
+    # This function sets how long the server will wait for a client to send its request once the
+    # client has connected to the server. If the client does not send a complete request
+    # within this time, the server aborts HTTP transaction and terminates the TCP connection.
+    timeout = 15;
+
+    # The server has a feature wherein it can tell querents things about itself,
+    # such as what methods is knows. The feature is called "introspection.
+    # By default, the feature is available, but if you set dont_advertise to nonzero, it isn't.
+    dontAdvertise = false;
+};
+
+
+
+// PicoScope Information:
+scope =
+{
+  channels = ( {  enabled = true; // specifies whether the channel is active
+                  coupling = 1; // type specifies the coupling mode: DC or AC
+                  range = 2000; // specifies the measuring range
+                  analogOffset = 0.0; // specifies the voltage in volts, to be added to the input signal before it reaches the input amplifier and digitizer
+                  hppdl = "platform:0.processor:0"; // HPP-DL component id (measured where)
+                  resistance = 0.01; // specifies the value of the measurement resistor (in ohm)
+                  gain = 20.0; // specifies the gain of the amplifier
+                  parport = false; // specifies whether the channel is measure a parallel port
+                },
+                ...
+              )
+}
+
+#------------------------------------------------
+# Using the scopeControlService
+#------------------------------------------------
+Usage:
+$ sudo /etc/init.d/scopeControlService start
+where scopeControlService is the scopeControlService.sh, which copied into the /etc/init.d/ directory
+$ sudo /etc/init.d/scopeControlService stop
+
+
+Root priviligies are not required.
